@@ -5,28 +5,47 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer src="/index.js"></script>
+    <!-- <script defer src="/index.js"></script> -->
     <title>Document</title>
 </head>
 
 <body>
 
     <script>
-        if ('geolocation' in navigator) {
-            // console.log('geo av')
-            navigator.geolocation.getCurrentPosition((position) => {
-                console.log(position) ;
-            });
-        } else {
-            console.log('geo not av')
+        const getGeoLocation = () => {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(async position => {
+                    const lat = position.coords.latitude
+                    const lon = position.coords.longitude
+
+                    const data = { lat, lon }
+
+                    const options = {
+                        method: "POST", //POST = send, GET = receive
+                        headers: {
+                            "Content-Type": 'application/json', // json
+                        },
+                        body: JSON.stringify(data) // lat, lon as json (object)
+                    }
+
+                    const response = await fetch('/api', options)
+                    const jsonData = await response.json()
+
+                });
+            } else {
+                console.log('geo not av')
+            }
         }
+
+        getGeoLocation()
     </script>
     <h1>Hiya!!! I'm the mfin homepage!!!</h1>
-    <!-- <p>&#x1F972a</p> -->
     Hiya, I'm the html page.
 
     <a href="/about.html">About</a>
     <a href="/">Home (here)</a>
+
+    <button onclick="getGeoLocation()">Get Location</button>
 </body>
 
 </html>
